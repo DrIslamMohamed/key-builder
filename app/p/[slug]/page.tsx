@@ -29,6 +29,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   return {
     title: `${config.meta.memberName} — KEY Webinar`,
     description: `Join ${config.meta.memberName}'s exclusive webinar`,
+    viewport: "width=device-width, initial-scale=1, maximum-scale=1",
   };
 }
 
@@ -70,7 +71,7 @@ export default async function PublicPage({ params }: { params: Promise<{ slug: s
           href={`https://wa.me/${config.meta.whatsappNumber}`}
           target="_blank"
           rel="noopener noreferrer"
-          className="fixed bottom-6 right-6 z-50 flex items-center gap-2 px-4 py-3 rounded-full shadow-lg font-semibold text-white transition-transform hover:scale-105"
+          className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-50 flex items-center gap-2 px-3 sm:px-4 py-2.5 sm:py-3 rounded-full shadow-lg font-semibold text-white text-sm sm:text-base transition-transform hover:scale-105 active:scale-95"
           style={{ backgroundColor: "#25D366" }}
         >
           <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">

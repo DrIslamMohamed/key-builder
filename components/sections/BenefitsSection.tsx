@@ -13,28 +13,28 @@ export default function BenefitsSection({ meta, content }: Props) {
   return (
     <section
       style={{ backgroundColor: bgAlt, color: text }}
-      className="py-16 px-6"
+      className="py-12 sm:py-16 px-4 sm:px-6"
     >
       <div className="max-w-3xl mx-auto">
         <h2
-          className="text-3xl font-bold text-center mb-10"
+          className="text-2xl sm:text-3xl font-bold text-center mb-8 sm:mb-10"
           style={{ color: primary }}
         >
           {content.title}
         </h2>
         <div className="grid gap-4">
           {content.items.map((item, index) => (
-            <div key={item.id} className="flex items-start gap-4">
+            <div key={item.id} className="flex items-start gap-3 sm:gap-4">
               <div
-                className="flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm"
+                className="flex-shrink-0 w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center font-bold text-xs sm:text-sm"
                 style={{ backgroundColor: primary, color: background }}
               >
                 {index + 1}
               </div>
               <div className="flex-1 pt-1">
                 <div className="flex items-start gap-2">
-                  <CheckCircle2 size={18} className="mt-0.5 flex-shrink-0" style={{ color: primary }} />
-                  <span>{item.text}</span>
+                  <CheckCircle2 size={16} className="mt-0.5 flex-shrink-0" style={{ color: primary }} />
+                  <span className="text-sm sm:text-base">{item.text}</span>
                 </div>
               </div>
             </div>

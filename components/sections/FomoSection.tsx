@@ -12,12 +12,12 @@ export default function FomoSection({ meta, content }: Props) {
   return (
     <section
       style={{ backgroundColor: background, color: text }}
-      className="py-16 px-6"
+      className="py-12 sm:py-16 px-4 sm:px-6"
     >
       <div className="max-w-3xl mx-auto">
-        <div className="flex items-center justify-center gap-3 mb-8">
-          <AlertTriangle size={28} style={{ color: primary }} />
-          <h2 className="text-3xl font-bold" style={{ color: primary }}>
+        <div className="flex items-center justify-center gap-2 sm:gap-3 mb-7 sm:mb-8">
+          <AlertTriangle size={24} style={{ color: primary }} />
+          <h2 className="text-2xl sm:text-3xl font-bold" style={{ color: primary }}>
             {content.title}
           </h2>
         </div>
@@ -25,7 +25,7 @@ export default function FomoSection({ meta, content }: Props) {
           {content.items.map((item) => (
             <div
               key={item.id}
-              className="flex items-center gap-3 p-4 rounded-xl border-l-4"
+              className="flex items-center gap-3 p-3 sm:p-4 rounded-xl border-l-4 text-sm sm:text-base"
               style={{
                 borderColor: primary,
                 backgroundColor: `${primary}11`,

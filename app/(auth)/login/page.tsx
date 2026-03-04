@@ -31,7 +31,6 @@ export default function LoginPage() {
       return;
     }
 
-    // Fetch session to determine role
     const res = await fetch("/api/auth/session");
     const session = await res.json();
 
@@ -43,11 +42,11 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-zinc-950">
+    <div className="min-h-screen flex items-center justify-center bg-zinc-950 px-4">
       <Card className="w-full max-w-md border-zinc-800 bg-zinc-900">
         <CardHeader className="text-center">
           <div className="text-3xl font-bold text-yellow-400 mb-2">KEY</div>
-          <CardTitle className="text-white">Sign in to your account</CardTitle>
+          <CardTitle className="text-white text-xl">Sign in to your account</CardTitle>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
@@ -59,7 +58,7 @@ export default function LoginPage() {
                 type="email"
                 required
                 placeholder="you@example.com"
-                className="bg-zinc-800 border-zinc-700 text-white"
+                className="bg-zinc-800 border-zinc-700 text-white text-base"
               />
             </div>
             <div className="space-y-2">
@@ -70,13 +69,13 @@ export default function LoginPage() {
                 type="password"
                 required
                 placeholder="••••••••"
-                className="bg-zinc-800 border-zinc-700 text-white"
+                className="bg-zinc-800 border-zinc-700 text-white text-base"
               />
             </div>
             <Button
               type="submit"
               disabled={loading}
-              className="w-full bg-yellow-400 hover:bg-yellow-500 text-black font-semibold"
+              className="w-full bg-yellow-400 hover:bg-yellow-500 text-black font-semibold h-12 text-base"
             >
               {loading ? "Signing in..." : "Sign In"}
             </Button>

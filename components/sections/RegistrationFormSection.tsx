@@ -49,11 +49,11 @@ export default function RegistrationFormSection({ meta, content, pageId, isPrevi
     <section
       id="register"
       style={{ backgroundColor: bgAlt, color: text }}
-      className="py-20 px-6"
+      className="py-14 sm:py-20 px-4 sm:px-6"
     >
-      <div className="max-w-md mx-auto">
+      <div className="max-w-md mx-auto w-full">
         <h2
-          className="text-3xl font-bold text-center mb-8"
+          className="text-2xl sm:text-3xl font-bold text-center mb-6 sm:mb-8"
           style={{ color: primary }}
         >
           {content.title}
@@ -61,30 +61,31 @@ export default function RegistrationFormSection({ meta, content, pageId, isPrevi
 
         {submitted ? (
           <div
-            className="text-center p-8 rounded-2xl border"
+            className="text-center p-6 sm:p-8 rounded-2xl border"
             style={{ borderColor: primary, backgroundColor: `${primary}11` }}
           >
             <div className="text-4xl mb-4">✅</div>
-            <p className="text-lg font-medium">{content.successMessage}</p>
+            <p className="text-base sm:text-lg font-medium">{content.successMessage}</p>
           </div>
         ) : (
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <form onSubmit={handleSubmit} className="space-y-3 sm:space-y-4">
+            {/* text-base (16px) prevents iOS auto-zoom on focus */}
             <input
               name="name"
               required
               placeholder="Full Name"
-              className="w-full px-4 py-3 rounded-xl border outline-none focus:ring-2 text-black"
-              style={{
-                borderColor: `${primary}66`,
-                ["--tw-ring-color" as string]: primary,
-              }}
+              autoComplete="name"
+              className="w-full px-4 py-3.5 rounded-xl border outline-none focus:ring-2 text-base text-black bg-white"
+              style={{ borderColor: `${primary}66` }}
             />
             <input
               name="email"
               type="email"
               required
               placeholder="Email Address"
-              className="w-full px-4 py-3 rounded-xl border outline-none focus:ring-2 text-black"
+              autoComplete="email"
+              inputMode="email"
+              className="w-full px-4 py-3.5 rounded-xl border outline-none focus:ring-2 text-base text-black bg-white"
               style={{ borderColor: `${primary}66` }}
             />
             <input
@@ -92,14 +93,16 @@ export default function RegistrationFormSection({ meta, content, pageId, isPrevi
               type="tel"
               required
               placeholder="Phone / WhatsApp"
-              className="w-full px-4 py-3 rounded-xl border outline-none focus:ring-2 text-black"
+              autoComplete="tel"
+              inputMode="tel"
+              className="w-full px-4 py-3.5 rounded-xl border outline-none focus:ring-2 text-base text-black bg-white"
               style={{ borderColor: `${primary}66` }}
             />
             {error && <p className="text-red-400 text-sm">{error}</p>}
             <button
               type="submit"
               disabled={loading || isPreview}
-              className="w-full py-4 rounded-xl font-bold text-lg transition-transform hover:scale-105 disabled:opacity-70 disabled:cursor-not-allowed"
+              className="w-full py-4 rounded-xl font-bold text-base sm:text-lg transition-transform hover:scale-105 active:scale-95 disabled:opacity-70 disabled:cursor-not-allowed"
               style={{ backgroundColor: primary, color: background }}
             >
               {loading ? "Submitting..." : content.submitButtonText}

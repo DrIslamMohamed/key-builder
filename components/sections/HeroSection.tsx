@@ -12,9 +12,8 @@ export default function HeroSection({ meta, content, isPreview }: Props) {
   return (
     <section
       style={{ backgroundColor: background, color: text }}
-      className="relative py-20 px-6 text-center overflow-hidden"
+      className="relative py-14 sm:py-20 px-4 sm:px-6 text-center overflow-hidden"
     >
-      {/* Background gradient */}
       <div
         className="absolute inset-0 opacity-10"
         style={{
@@ -22,40 +21,35 @@ export default function HeroSection({ meta, content, isPreview }: Props) {
         }}
       />
 
-      <div className="relative z-10 max-w-3xl mx-auto space-y-6">
-        {/* Member photo */}
+      <div className="relative z-10 max-w-3xl mx-auto space-y-5 sm:space-y-6">
         {meta.memberPhoto && (
           <div className="flex justify-center">
             <img
               src={meta.memberPhoto}
               alt={meta.memberName}
-              className="w-24 h-24 rounded-full object-cover border-4"
+              className="w-20 h-20 sm:w-24 sm:h-24 rounded-full object-cover border-4"
               style={{ borderColor: primary }}
             />
           </div>
         )}
 
-        {/* Member name */}
         <div className="text-sm font-medium opacity-70">{meta.memberName}</div>
 
-        {/* Headline */}
         <h1
-          className="text-4xl md:text-5xl font-extrabold leading-tight"
+          className="text-3xl sm:text-4xl md:text-5xl font-extrabold leading-tight"
           style={{ color: primary }}
         >
           {content.headline}
         </h1>
 
-        {/* Subheadline */}
-        <p className="text-lg md:text-xl opacity-80 max-w-2xl mx-auto">
+        <p className="text-base sm:text-lg md:text-xl opacity-80 max-w-2xl mx-auto">
           {content.subheadline}
         </p>
 
-        {/* CTA */}
         {!isPreview && (
           <a
             href="#register"
-            className="inline-block px-8 py-4 rounded-full font-bold text-lg transition-transform hover:scale-105"
+            className="inline-block px-6 sm:px-8 py-3 sm:py-4 rounded-full font-bold text-base sm:text-lg transition-transform hover:scale-105 active:scale-95"
             style={{ backgroundColor: primary, color: background }}
           >
             {content.ctaText}
@@ -63,7 +57,7 @@ export default function HeroSection({ meta, content, isPreview }: Props) {
         )}
         {isPreview && (
           <button
-            className="inline-block px-8 py-4 rounded-full font-bold text-lg opacity-80"
+            className="inline-block px-6 sm:px-8 py-3 sm:py-4 rounded-full font-bold text-base sm:text-lg opacity-80"
             style={{ backgroundColor: primary, color: background }}
           >
             {content.ctaText}
