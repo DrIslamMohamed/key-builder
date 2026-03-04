@@ -1,0 +1,115 @@
+"use client";
+
+import { useState } from "react";
+import { PageMeta, RegistrationFormContent } from "@/lib/types";
+
+type Props = {
+  meta: PageMeta;
+  content: RegistrationFormContent;
+  pageId: string;
+  isPreview?: boolean;
+};
+
+export default function RegistrationFormSection({ meta, content, pageId, isPreview }: Props) {
+  const { primary, background, text } = meta.colorTheme;
+  const [loading, setLoading] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
+  const [error, setError] = useState("");
+
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    if (isPreview) return;
+    setLoading(true);
+    setError("");
+
+    const form = new FormData(e.currentTarget);
+    const res = await fetch(`/api/submit/${pageId}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        name: form.get("name"),
+        email: form.get("email"),
+        phone: form.get("phone"),
+      }),
+    });
+
+    setLoading(false);
+
+    if (!res.ok) {
+      setError("Something went wrong. Please try again.");
+      return;
+    }
+
+    setSubmitted(true);
+  }
+
+  const bgAlt = background === "#0a0a0a" ? "#111111" : `${background}cc`;
+
+  return (
+    <section
+      id="register"
+      style={{ backgroundColor: bgAlt, color: text }}
+      className="py-20 px-6"
+    >
+      <div className="max-w-md mx-auto">
+        <h2
+          className="text-3xl font-bold text-center mb-8"
+          style={{ color: primary }}
+        >
+          {content.title}
+        </h2>
+
+        {submitted ? (
+          <div
+            className="text-center p-8 rounded-2xl border"
+            style={{ borderColor: primary, backgroundColor: `${primary}11` }}
+          >
+            <div className="text-4xl mb-4">✅</div>
+            <p className="text-lg font-medium">{content.successMessage}</p>
+          </div>
+        ) : (
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <input
+              name="name"
+              required
+              placeholder="Full Name"
+              className="w-full px-4 py-3 rounded-xl border outline-none focus:ring-2 text-black"
+              style={{
+                borderColor: `${primary}66`,
+                ["--tw-ring-color" as string]: primary,
+              }}
+            />
+            <input
+              name="email"
+              type="email"
+              required
+              placeholder="Email Address"
+              className="w-full px-4 py-3 rounded-xl border outline-none focus:ring-2 text-black"
+              style={{ borderColor: `${primary}66` }}
+            />
+            <input
+              name="phone"
+              type="tel"
+              required
+              placeholder="Phone / WhatsApp"
+              className="w-full px-4 py-3 rounded-xl border outline-none focus:ring-2 text-black"
+              style={{ borderColor: `${primary}66` }}
+            />
+            {error && <p className="text-red-400 text-sm">{error}</p>}
+            <button
+              type="submit"
+              disabled={loading || isPreview}
+              className="w-full py-4 rounded-xl font-bold text-lg transition-transform hover:scale-105 disabled:opacity-70 disabled:cursor-not-allowed"
+              style={{ backgroundColor: primary, color: background }}
+            >
+              {loading ? "Submitting..." : content.submitButtonText}
+            </button>
+            {isPreview && (
+              <p className="text-center text-xs opacity-50">Form disabled in preview</p>
+            )}
+          </form>
+        )}
+      </div>
+    </section>
+  );
+}

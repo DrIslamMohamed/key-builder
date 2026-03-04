@@ -1,0 +1,44 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Role {
+  ADMIN
+  MEMBER
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  name      String
+  role      Role     @default(MEMBER)
+  createdAt DateTime @default(now())
+  page      Page?
+}
+
+model Page {
+  id          String           @id @default(cuid())
+  slug        String           @unique
+  published   Boolean          @default(false)
+  config      Json
+  userId      String           @unique
+  user        User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  submissions FormSubmission[]
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+}
+
+model FormSubmission {
+  id          String   @id @default(cuid())
+  pageId      String
+  page        Page     @relation(fields: [pageId], references: [id], onDelete: Cascade)
+  name        String
+  email       String
+  phone       String
+  submittedAt DateTime @default(now())
+}
