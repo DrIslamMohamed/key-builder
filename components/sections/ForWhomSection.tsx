@@ -1,4 +1,4 @@
-import { PageMeta, ForWhomContent } from "@/lib/types";
+import { PageMeta, ForWhomContent, SectionStyle } from "@/lib/types";
 import { Target, TrendingUp, Users, Star, Zap, CheckCircle } from "lucide-react";
 
 const ICONS: Record<string, React.ComponentType<{ size?: number; style?: React.CSSProperties }>> = {
@@ -10,18 +10,24 @@ const ICONS: Record<string, React.ComponentType<{ size?: number; style?: React.C
   check: CheckCircle,
 };
 
+const fontSizeClass = { sm: "text-sm", base: "text-base", lg: "text-lg" } as const;
+
 type Props = {
   meta: PageMeta;
   content: ForWhomContent;
+  style?: SectionStyle;
 };
 
-export default function ForWhomSection({ meta, content }: Props) {
+export default function ForWhomSection({ meta, content, style }: Props) {
   const { primary, background, text } = meta.colorTheme;
+  const bg = style?.bgColor ?? background;
+  const fg = style?.textColor ?? text;
+  const sizeClass = fontSizeClass[style?.fontSize ?? "base"];
 
   return (
     <section
-      style={{ backgroundColor: background, color: text }}
-      className="py-12 sm:py-16 px-4 sm:px-6"
+      style={{ backgroundColor: bg, color: fg }}
+      className={`py-12 sm:py-16 px-4 sm:px-6 ${sizeClass}`}
     >
       <div className="max-w-3xl mx-auto">
         <h2

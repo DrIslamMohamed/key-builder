@@ -1,19 +1,25 @@
-import { PageMeta, BenefitsContent } from "@/lib/types";
+import { PageMeta, BenefitsContent, SectionStyle } from "@/lib/types";
 import { CheckCircle2 } from "lucide-react";
+
+const fontSizeClass = { sm: "text-sm", base: "text-base", lg: "text-lg" } as const;
 
 type Props = {
   meta: PageMeta;
   content: BenefitsContent;
+  style?: SectionStyle;
 };
 
-export default function BenefitsSection({ meta, content }: Props) {
+export default function BenefitsSection({ meta, content, style }: Props) {
   const { primary, background, text } = meta.colorTheme;
   const bgAlt = background === "#0a0a0a" ? "#111111" : `${background}cc`;
+  const bg = style?.bgColor ?? bgAlt;
+  const fg = style?.textColor ?? text;
+  const sizeClass = fontSizeClass[style?.fontSize ?? "base"];
 
   return (
     <section
-      style={{ backgroundColor: bgAlt, color: text }}
-      className="py-12 sm:py-16 px-4 sm:px-6"
+      style={{ backgroundColor: bg, color: fg }}
+      className={`py-12 sm:py-16 px-4 sm:px-6 ${sizeClass}`}
     >
       <div className="max-w-3xl mx-auto">
         <h2

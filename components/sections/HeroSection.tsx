@@ -1,18 +1,24 @@
-import { PageMeta, HeroContent } from "@/lib/types";
+import { PageMeta, HeroContent, SectionStyle } from "@/lib/types";
+
+const fontSizeClass = { sm: "text-sm", base: "text-base", lg: "text-lg" } as const;
 
 type Props = {
   meta: PageMeta;
   content: HeroContent;
   isPreview?: boolean;
+  style?: SectionStyle;
 };
 
-export default function HeroSection({ meta, content, isPreview }: Props) {
+export default function HeroSection({ meta, content, isPreview, style }: Props) {
   const { primary, background, text } = meta.colorTheme;
+  const bg = style?.bgColor ?? background;
+  const fg = style?.textColor ?? text;
+  const sizeClass = fontSizeClass[style?.fontSize ?? "base"];
 
   return (
     <section
-      style={{ backgroundColor: background, color: text }}
-      className="relative py-14 sm:py-20 px-4 sm:px-6 text-center overflow-hidden"
+      style={{ backgroundColor: bg, color: fg }}
+      className={`relative py-14 sm:py-20 px-4 sm:px-6 text-center overflow-hidden ${sizeClass}`}
     >
       <div
         className="absolute inset-0 opacity-10"

@@ -1,11 +1,27 @@
 import { prisma } from "@/lib/prisma";
 import { notFound } from "next/navigation";
-import { PageConfig, Section, HeroContent, ForWhomContent, BenefitsContent, FomoContent, RegistrationFormContent } from "@/lib/types";
+import {
+  PageConfig, Section,
+  HeroContent, ForWhomContent, BenefitsContent, FomoContent, RegistrationFormContent,
+  GalleryContent, VideoContent, TestimonialsContent, CarouselContent,
+  RatingsContent, FaqContent, CountdownContent, VisitorCounterContent,
+  LimitedSeatsContent, RegisterNowContent,
+} from "@/lib/types";
 import HeroSection from "@/components/sections/HeroSection";
 import ForWhomSection from "@/components/sections/ForWhomSection";
 import BenefitsSection from "@/components/sections/BenefitsSection";
 import FomoSection from "@/components/sections/FomoSection";
 import RegistrationFormSection from "@/components/sections/RegistrationFormSection";
+import GallerySection from "@/components/sections/GallerySection";
+import VideoSection from "@/components/sections/VideoSection";
+import TestimonialsSection from "@/components/sections/TestimonialsSection";
+import CarouselSection from "@/components/sections/CarouselSection";
+import RatingsSection from "@/components/sections/RatingsSection";
+import FaqSection from "@/components/sections/FaqSection";
+import CountdownSection from "@/components/sections/CountdownSection";
+import VisitorCounterSection from "@/components/sections/VisitorCounterSection";
+import LimitedSeatsSection from "@/components/sections/LimitedSeatsSection";
+import RegisterNowSection from "@/components/sections/RegisterNowSection";
 
 export const revalidate = 60;
 
@@ -35,18 +51,40 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
 function renderSection(section: Section, config: PageConfig, pageId: string) {
   if (!section.visible) return null;
+  const { meta } = config;
+  const { style } = section;
 
   switch (section.type) {
     case "hero":
-      return <HeroSection key={section.id} meta={config.meta} content={section.content as HeroContent} />;
+      return <HeroSection key={section.id} meta={meta} content={section.content as HeroContent} style={style} />;
     case "forWhom":
-      return <ForWhomSection key={section.id} meta={config.meta} content={section.content as ForWhomContent} />;
+      return <ForWhomSection key={section.id} meta={meta} content={section.content as ForWhomContent} style={style} />;
     case "benefits":
-      return <BenefitsSection key={section.id} meta={config.meta} content={section.content as BenefitsContent} />;
+      return <BenefitsSection key={section.id} meta={meta} content={section.content as BenefitsContent} style={style} />;
     case "fomo":
-      return <FomoSection key={section.id} meta={config.meta} content={section.content as FomoContent} />;
+      return <FomoSection key={section.id} meta={meta} content={section.content as FomoContent} style={style} />;
     case "registrationForm":
-      return <RegistrationFormSection key={section.id} meta={config.meta} content={section.content as RegistrationFormContent} pageId={pageId} />;
+      return <RegistrationFormSection key={section.id} meta={meta} content={section.content as RegistrationFormContent} pageId={pageId} style={style} />;
+    case "gallery":
+      return <GallerySection key={section.id} meta={meta} content={section.content as GalleryContent} style={style} />;
+    case "video":
+      return <VideoSection key={section.id} meta={meta} content={section.content as VideoContent} style={style} />;
+    case "testimonials":
+      return <TestimonialsSection key={section.id} meta={meta} content={section.content as TestimonialsContent} style={style} />;
+    case "carousel":
+      return <CarouselSection key={section.id} meta={meta} content={section.content as CarouselContent} style={style} />;
+    case "ratings":
+      return <RatingsSection key={section.id} meta={meta} content={section.content as RatingsContent} style={style} />;
+    case "faq":
+      return <FaqSection key={section.id} meta={meta} content={section.content as FaqContent} style={style} />;
+    case "countdown":
+      return <CountdownSection key={section.id} meta={meta} content={section.content as CountdownContent} style={style} />;
+    case "visitorCounter":
+      return <VisitorCounterSection key={section.id} meta={meta} content={section.content as VisitorCounterContent} style={style} />;
+    case "limitedSeats":
+      return <LimitedSeatsSection key={section.id} meta={meta} content={section.content as LimitedSeatsContent} style={style} />;
+    case "registerNow":
+      return <RegisterNowSection key={section.id} meta={meta} content={section.content as RegisterNowContent} style={style} />;
     default:
       return null;
   }
@@ -71,7 +109,7 @@ export default async function PublicPage({ params }: { params: Promise<{ slug: s
           href={`https://wa.me/${config.meta.whatsappNumber}`}
           target="_blank"
           rel="noopener noreferrer"
-          className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-50 flex items-center gap-2 px-3 sm:px-4 py-2.5 sm:py-3 rounded-full shadow-lg font-semibold text-white text-sm sm:text-base transition-transform hover:scale-105 active:scale-95"
+          className="fixed bottom-4 end-4 sm:bottom-6 sm:end-6 z-50 flex items-center gap-2 px-3 sm:px-4 py-2.5 sm:py-3 rounded-full shadow-lg font-semibold text-white text-sm sm:text-base transition-transform hover:scale-105 active:scale-95"
           style={{ backgroundColor: "#25D366" }}
         >
           <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">

@@ -1,18 +1,24 @@
-import { PageMeta, FomoContent } from "@/lib/types";
+import { PageMeta, FomoContent, SectionStyle } from "@/lib/types";
 import { AlertTriangle } from "lucide-react";
+
+const fontSizeClass = { sm: "text-sm", base: "text-base", lg: "text-lg" } as const;
 
 type Props = {
   meta: PageMeta;
   content: FomoContent;
+  style?: SectionStyle;
 };
 
-export default function FomoSection({ meta, content }: Props) {
+export default function FomoSection({ meta, content, style }: Props) {
   const { primary, background, text } = meta.colorTheme;
+  const bg = style?.bgColor ?? background;
+  const fg = style?.textColor ?? text;
+  const sizeClass = fontSizeClass[style?.fontSize ?? "base"];
 
   return (
     <section
-      style={{ backgroundColor: background, color: text }}
-      className="py-12 sm:py-16 px-4 sm:px-6"
+      style={{ backgroundColor: bg, color: fg }}
+      className={`py-12 sm:py-16 px-4 sm:px-6 ${sizeClass}`}
     >
       <div className="max-w-3xl mx-auto">
         <div className="flex items-center justify-center gap-2 sm:gap-3 mb-7 sm:mb-8">
