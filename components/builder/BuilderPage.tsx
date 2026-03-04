@@ -193,7 +193,7 @@ export default function BuilderPage({ initialConfig, initialPublished, initialSl
           <span className="text-xs text-zinc-400 hidden sm:inline truncate max-w-[100px]">{userName}</span>
           <LanguageSwitcher />
           <a
-            href={`/p/${initialSlug}`}
+            href="/builder/preview"
             target="_blank"
             rel="noopener noreferrer"
             className="px-2 sm:px-3 py-1.5 text-xs sm:text-sm rounded border border-zinc-700 text-zinc-300 hover:text-white hover:border-zinc-500 transition-colors whitespace-nowrap"

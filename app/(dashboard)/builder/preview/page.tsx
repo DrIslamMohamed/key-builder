@@ -1,5 +1,6 @@
+import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
-import { notFound } from "next/navigation";
+import { redirect } from "next/navigation";
 import {
   PageConfig, Section,
   HeroContent, ForWhomContent, BenefitsContent, FomoContent, RegistrationFormContent,
@@ -23,78 +24,57 @@ import VisitorCounterSection from "@/components/sections/VisitorCounterSection";
 import LimitedSeatsSection from "@/components/sections/LimitedSeatsSection";
 import RegisterNowSection from "@/components/sections/RegisterNowSection";
 
-export const revalidate = 60;
-
-export async function generateStaticParams() {
-  try {
-    const pages = await prisma.page.findMany({
-      where: { published: true },
-      select: { slug: true },
-    });
-    return pages.map((p: { slug: string }) => ({ slug: p.slug }));
-  } catch {
-    return [];
-  }
-}
-
-export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
-  const { slug } = await params;
-  const page = await prisma.page.findUnique({ where: { slug } });
-  if (!page) return { title: "Not Found" };
-  const config = page.config as PageConfig;
-  return {
-    title: `${config.meta.memberName} — KEY Webinar`,
-    description: `Join ${config.meta.memberName}'s exclusive webinar`,
-    viewport: "width=device-width, initial-scale=1, maximum-scale=1",
-  };
-}
+// Always dynamic — never ISR-cached, needs real session cookies
+export const dynamic = "force-dynamic";
 
 function renderSection(section: Section, config: PageConfig, pageId: string) {
   if (!section.visible) return null;
-  const { meta } = config;
   const { style } = section;
 
   switch (section.type) {
     case "hero":
-      return <HeroSection key={section.id} meta={meta} content={section.content as HeroContent} style={style} />;
+      return <HeroSection key={section.id} meta={config.meta} content={section.content as HeroContent} style={style} />;
     case "forWhom":
-      return <ForWhomSection key={section.id} meta={meta} content={section.content as ForWhomContent} style={style} />;
+      return <ForWhomSection key={section.id} meta={config.meta} content={section.content as ForWhomContent} style={style} />;
     case "benefits":
-      return <BenefitsSection key={section.id} meta={meta} content={section.content as BenefitsContent} style={style} />;
+      return <BenefitsSection key={section.id} meta={config.meta} content={section.content as BenefitsContent} style={style} />;
     case "fomo":
-      return <FomoSection key={section.id} meta={meta} content={section.content as FomoContent} style={style} />;
+      return <FomoSection key={section.id} meta={config.meta} content={section.content as FomoContent} style={style} />;
     case "registrationForm":
-      return <RegistrationFormSection key={section.id} meta={meta} content={section.content as RegistrationFormContent} pageId={pageId} style={style} />;
+      return <RegistrationFormSection key={section.id} meta={config.meta} content={section.content as RegistrationFormContent} pageId={pageId} style={style} />;
     case "gallery":
-      return <GallerySection key={section.id} meta={meta} content={section.content as GalleryContent} style={style} />;
+      return <GallerySection key={section.id} meta={config.meta} content={section.content as GalleryContent} style={style} />;
     case "video":
-      return <VideoSection key={section.id} meta={meta} content={section.content as VideoContent} style={style} />;
+      return <VideoSection key={section.id} meta={config.meta} content={section.content as VideoContent} style={style} />;
     case "testimonials":
-      return <TestimonialsSection key={section.id} meta={meta} content={section.content as TestimonialsContent} style={style} />;
+      return <TestimonialsSection key={section.id} meta={config.meta} content={section.content as TestimonialsContent} style={style} />;
     case "carousel":
-      return <CarouselSection key={section.id} meta={meta} content={section.content as CarouselContent} style={style} />;
+      return <CarouselSection key={section.id} meta={config.meta} content={section.content as CarouselContent} style={style} />;
     case "ratings":
-      return <RatingsSection key={section.id} meta={meta} content={section.content as RatingsContent} style={style} />;
+      return <RatingsSection key={section.id} meta={config.meta} content={section.content as RatingsContent} style={style} />;
     case "faq":
-      return <FaqSection key={section.id} meta={meta} content={section.content as FaqContent} style={style} />;
+      return <FaqSection key={section.id} meta={config.meta} content={section.content as FaqContent} style={style} />;
     case "countdown":
-      return <CountdownSection key={section.id} meta={meta} content={section.content as CountdownContent} style={style} />;
+      return <CountdownSection key={section.id} meta={config.meta} content={section.content as CountdownContent} style={style} />;
     case "visitorCounter":
-      return <VisitorCounterSection key={section.id} meta={meta} content={section.content as VisitorCounterContent} style={style} />;
+      return <VisitorCounterSection key={section.id} meta={config.meta} content={section.content as VisitorCounterContent} style={style} />;
     case "limitedSeats":
-      return <LimitedSeatsSection key={section.id} meta={meta} content={section.content as LimitedSeatsContent} style={style} />;
+      return <LimitedSeatsSection key={section.id} meta={config.meta} content={section.content as LimitedSeatsContent} style={style} />;
     case "registerNow":
-      return <RegisterNowSection key={section.id} meta={meta} content={section.content as RegisterNowContent} style={style} />;
+      return <RegisterNowSection key={section.id} meta={config.meta} content={section.content as RegisterNowContent} style={style} />;
     default:
       return null;
   }
 }
 
-export default async function PublicPage({ params }: { params: Promise<{ slug: string }> }) {
-  const { slug } = await params;
-  const page = await prisma.page.findUnique({ where: { slug } });
+export default async function BuilderPreviewPage() {
+  const session = await auth();
+  if (!session?.user?.id) redirect("/login");
 
-  if (!page || !page.published) notFound();
+  const page = await prisma.page.findUnique({
+    where: { userId: session.user.id },
+  });
+  if (!page) redirect("/builder");
 
   const config = page.config as PageConfig;
   const sections = [...config.sections].sort((a, b) => a.order - b.order);
