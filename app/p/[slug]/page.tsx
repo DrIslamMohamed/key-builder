@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/prisma";
+import { auth } from "@/lib/auth";
 import { notFound } from "next/navigation";
 import {
   PageConfig, Section,
@@ -94,7 +95,13 @@ export default async function PublicPage({ params }: { params: Promise<{ slug: s
   const { slug } = await params;
   const page = await prisma.page.findUnique({ where: { slug } });
 
-  if (!page || !page.published) notFound();
+  if (!page) notFound();
+
+  if (!page.published) {
+    // Allow the authenticated page owner to preview unpublished pages
+    const session = await auth();
+    if (!session?.user?.id || session.user.id !== page.userId) notFound();
+  }
 
   const config = page.config as PageConfig;
   const sections = [...config.sections].sort((a, b) => a.order - b.order);

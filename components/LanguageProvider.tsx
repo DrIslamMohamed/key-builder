@@ -18,29 +18,26 @@ const LanguageContext = createContext<LanguageContextType>({
 export function LanguageProvider({ children }: { children: React.ReactNode }) {
   const [lang, setLangState] = useState<Lang>("en");
 
+  // Load saved language from localStorage on mount
   useEffect(() => {
     const saved = localStorage.getItem("lang") as Lang | null;
     if (saved === "ar" || saved === "en") {
-      applyLang(saved);
       setLangState(saved);
     }
   }, []);
 
-  function applyLang(l: Lang) {
-    document.documentElement.lang = l;
-    document.documentElement.dir = l === "ar" ? "rtl" : "ltr";
-  }
+  // Sync <html> lang + dir attributes whenever lang changes
+  useEffect(() => {
+    document.documentElement.lang = lang;
+    document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
+  }, [lang]);
 
   function setLang(l: Lang) {
     setLangState(l);
     localStorage.setItem("lang", l);
-    applyLang(l);
   }
 
-  const translations = getTranslations(lang);
-  function t(key: TranslationKey): string {
-    return translations[key];
-  }
+  const t = (key: TranslationKey): string => getTranslations(lang)[key];
 
   return (
     <LanguageContext.Provider value={{ lang, setLang, t }}>
